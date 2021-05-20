@@ -20,7 +20,7 @@ services:
       context: .
       dockerfile: ./build/nodejs/Dockerfile
     restart: "always"
-    image: registry.gitlab.com/nastavnichestvo/persistant-redis-storage:node_14
+    image: registry.gitlab.com/aliasgame/persistant-redis-storage:node_14
     env_file: ./build/.env.list
 
   prs-database-redis:
