@@ -1,4 +1,6 @@
 import { logger } from './logger.js';
+import AsyncLock from 'async-lock';
+const lock = new AsyncLock();
 import redis from "redis";
 const client = redis.createClient({
   host: "prs-database-redis",
@@ -31,6 +33,18 @@ const persistentRedisService = {
     }
     return def;
   },
+
+  getIncrement: async (prefix, key) => {
+    let newIncrement;
+    await lock.acquire(`${prefix}_${key}`, async function(cb) {
+      const currIncrement = await persistentRedisService.get(prefix, key, 0);
+      newIncrement = currIncrement + 1;
+      await persistentRedisService.set(prefix, key, newIncrement);
+      cb();
+    });
+
+    return newIncrement;
+  }
 };
 
 export { persistentRedisService };
