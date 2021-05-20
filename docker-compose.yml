@@ -1,0 +1,33 @@
+version: "3.6"
+
+networks:
+  default:
+    external:
+      name: network
+
+volumes:
+  prs-redis-persistence:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/mnt/prs_storage'
+
+services:
+  prs-server-nodejs:
+    container_name: prs-server-nodejs
+    build:
+      context: .
+      dockerfile: ./build/nodejs/Dockerfile
+    restart: "always"
+    image: registry.gitlab.com/nastavnichestvo/persistant-redis-storage:node_14
+    env_file: ./build/.env.list
+
+  prs-database-redis:
+    container_name: prs-database-redis
+    image: bitnami/redis:6.0.12
+    restart: "always"
+    volumes:
+      - prs-redis-persistence:/bitnami/redis/data
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes

@@ -1,0 +1,23 @@
+version: "3.6"
+
+networks:
+  default:
+    external:
+      name: ttfb
+
+services:
+  prs-server-nodejs:
+    restart: "no"
+    networks:
+      default:
+        aliases:
+          - prs
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.prs.rule=Host(`prs.lc`)
+      - traefik.http.routers.prs.entrypoints=web
+
+  prs-database-redis:
+    restart: "no"
+    volumes:
+      - ./.data/redis:/bitnami/redis/data
