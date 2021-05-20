@@ -9,6 +9,7 @@ const client = redis.createClient({
 import { promisify } from "util";
 const getAsync = promisify(client.get).bind(client);
 const setAsync = promisify(client.set).bind(client);
+const delAsync = promisify(client.del).bind(client);
 
 client.on("error", function (error) {
   logger.error(error, {})
@@ -44,7 +45,15 @@ const persistentRedisService = {
     });
 
     return newIncrement;
-  }
+  },
+
+  del: async(prefix, key) => {
+    try {
+      await delAsync(`${prefix}_${key}`);
+    } catch (error) {
+      logger.error(error.message, {prefix, key, value})
+    }
+  },
 };
 
 export { persistentRedisService };

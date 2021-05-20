@@ -16,6 +16,11 @@ app.post('/user/:user_id([\\d])/parameter/:parameter([a-z\\d\_]{1,50})', async (
   return res.send();
 });
 
+app.delete('/user/:user_id([\\d])/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res) => {
+  await persistentRedisService.del(prefix_user, `${req.params.user_id}_${req.params.parameter}`)
+  return res.send();
+});
+
 app.get('/user/:user_id([\\d])/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res) => {
   const answ = await persistentRedisService.get(prefix_user, `${req.params.user_id}_${req.params.parameter}`);
   if (answ) {
@@ -29,6 +34,11 @@ app.post('/room/:room_id/parameter/:parameter([a-z\\d\_]{1,50})', async (req, re
   return res.send();
 });
 
+app.delete('/room/:room_id/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res) => {
+  await persistentRedisService.del(prefix_user, `${req.params.user_id}_${req.params.parameter}`)
+  return res.send();
+});
+
 app.get('/room/:room_id/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res) => {
   const answ = await persistentRedisService.get(prefix_user, `${req.params.room_id}_${req.params.parameter}`);
   if (answ) {
@@ -39,6 +49,11 @@ app.get('/room/:room_id/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res
 
 app.post('/app/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res) => {
   await persistentRedisService.set(prefix_app, `app_${req.params.parameter}`, req.body)
+  return res.send();
+});
+
+app.delete('/app/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res) => {
+  await persistentRedisService.del(prefix_user, `${req.params.user_id}_${req.params.parameter}`)
   return res.send();
 });
 
