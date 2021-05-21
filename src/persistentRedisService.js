@@ -6,7 +6,7 @@ const client = redis.createClient({
   host: "prs-database-redis",
   port: 6379,
 });
-import { promisify } from "util";
+import { isNull, promisify } from "util";
 const getAsync = promisify(client.get).bind(client);
 const setAsync = promisify(client.set).bind(client);
 const delAsync = promisify(client.del).bind(client);
@@ -27,8 +27,8 @@ const persistentRedisService = {
 
   get: async (prefix, key, def = undefined) => {
     try {
-      const result = (await getAsync(`${prefix}_${key}`));
-      return result;
+      const result = await getAsync(`${prefix}_${key}`);
+      return result !== null ? result : def;
     } catch (error) {
       logger.error(error.message, {})
     }
@@ -39,7 +39,7 @@ const persistentRedisService = {
     let newIncrement;
     await lock.acquire(`${prefix}_${key}`, async function(cb) {
       const currIncrement = await persistentRedisService.get(prefix, key, 0);
-      newIncrement = currIncrement + 1;
+      newIncrement = parseInt(currIncrement) + 1;
       await persistentRedisService.set(prefix, key, newIncrement);
       cb();
     });

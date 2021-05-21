@@ -70,11 +70,11 @@ app.get('/increment/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res) =>
   if (answ) {
     return res.send(String(answ));
   }
-  return res.stsendStatusatus(404);
+  return res.sendStatus(404);
 });
 
 app.delete('/increment/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res) => {
-  await persistentRedisService.del(prefix_incremet, `${req.params.user_id}_${req.params.parameter}`)
+  await persistentRedisService.del(prefix_incremet, `${req.params.parameter}`)
   return res.send();
 });
 
