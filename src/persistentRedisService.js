@@ -19,7 +19,7 @@ const persistentRedisService = {
   
   set: async (prefix, key, value) => {
     try {
-      return await setAsync(`${prefix}_${key}`, JSON.stringify(value));
+      return await setAsync(`${prefix}_${key}`, value);
     } catch (error) {
       logger.error(error.message, {prefix, key, value})
     }
@@ -28,7 +28,7 @@ const persistentRedisService = {
   get: async (prefix, key, def = undefined) => {
     try {
       const result = (await getAsync(`${prefix}_${key}`));
-      return JSON.parse(result);
+      return result;
     } catch (error) {
       logger.error(error.message, {})
     }
