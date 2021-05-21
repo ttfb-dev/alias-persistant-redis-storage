@@ -35,12 +35,12 @@ app.post('/room/:room_id/parameter/:parameter([a-z\\d\_]{1,50})', async (req, re
 });
 
 app.delete('/room/:room_id/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res) => {
-  await persistentRedisService.del(prefix_user, `${req.params.user_id}_${req.params.parameter}`)
+  await persistentRedisService.del(prefix_room, `${req.params.user_id}_${req.params.parameter}`)
   return res.send();
 });
 
 app.get('/room/:room_id/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res) => {
-  const answ = await persistentRedisService.get(prefix_user, `${req.params.room_id}_${req.params.parameter}`);
+  const answ = await persistentRedisService.get(prefix_room, `${req.params.room_id}_${req.params.parameter}`);
   if (answ) {
     return res.send(answ);
   }
@@ -53,7 +53,7 @@ app.post('/app/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res) => {
 });
 
 app.delete('/app/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res) => {
-  await persistentRedisService.del(prefix_user, `${req.params.user_id}_${req.params.parameter}`)
+  await persistentRedisService.del(prefix_app, `${req.params.user_id}_${req.params.parameter}`)
   return res.send();
 });
 
@@ -71,6 +71,11 @@ app.get('/increment/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res) =>
     return res.send(String(answ));
   }
   return res.stsendStatusatus(404);
+});
+
+app.delete('/increment/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res) => {
+  await persistentRedisService.del(prefix_incremet, `${req.params.user_id}_${req.params.parameter}`)
+  return res.send();
 });
 
 app.get("/", async (req, res) => {
