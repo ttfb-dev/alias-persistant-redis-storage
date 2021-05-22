@@ -1,6 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import { persistentRedisService } from "./persistentRedisService.js";
+import { logger } from "./logger.js";
 
 const app = express();
 const port = 80;
@@ -48,7 +49,8 @@ app.get('/room/:room_id/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res
 });
 
 app.post('/app/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res) => {
-  await persistentRedisService.set(prefix_app, `app_${req.params.parameter}`, req.body)
+  const result = await persistentRedisService.set(prefix_app, `app_${req.params.parameter}`, req.body)
+  logger.debug('got app set', {result: result});
   return res.send();
 });
 
