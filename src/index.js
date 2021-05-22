@@ -49,18 +49,17 @@ app.get('/room/:room_id/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res
 });
 
 app.post('/app/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res) => {
-  const result = await persistentRedisService.set(prefix_app, `app_${req.params.parameter}`, req.body)
-  logger.debug('got app set', {result: result});
+  const result = await persistentRedisService.set(prefix_app, req.params.parameter, req.body)
   return res.send();
 });
 
 app.delete('/app/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res) => {
-  await persistentRedisService.del(prefix_app, `${req.params.parameter}`)
+  await persistentRedisService.del(prefix_app, req.params.parameter)
   return res.send();
 });
 
 app.get('/app/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res) => {
-  const answ = await persistentRedisService.get(prefix_app, `${req.params.parameter}`);
+  const answ = await persistentRedisService.get(prefix_app, req.params.parameter);
   if (answ) {
     return res.send(answ);
   }
@@ -68,7 +67,7 @@ app.get('/app/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res) => {
 });
 
 app.get('/increment/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res) => {
-  const answ = await persistentRedisService.getIncrement(prefix_incremet, `${req.params.parameter}`);
+  const answ = await persistentRedisService.getIncrement(prefix_incremet, req.params.parameter);
   if (answ) {
     return res.send(String(answ));
   }
@@ -76,7 +75,7 @@ app.get('/increment/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res) =>
 });
 
 app.delete('/increment/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res) => {
-  await persistentRedisService.del(prefix_incremet, `${req.params.parameter}`)
+  await persistentRedisService.del(prefix_incremet, req.params.parameter)
   return res.send();
 });
 
