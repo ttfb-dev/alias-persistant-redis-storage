@@ -35,7 +35,7 @@ app.post('/room/:room_id/parameter/:parameter([a-z\\d\_]{1,50})', async (req, re
 });
 
 app.delete('/room/:room_id/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res) => {
-  await persistentRedisService.del(prefix_room, `${req.params.user_id}_${req.params.parameter}`)
+  await persistentRedisService.del(prefix_room, `${req.params.room_id}_${req.params.parameter}`)
   return res.send();
 });
 
