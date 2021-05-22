@@ -53,7 +53,7 @@ app.post('/app/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res) => {
 });
 
 app.delete('/app/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res) => {
-  await persistentRedisService.del(prefix_app, `${req.params.user_id}_${req.params.parameter}`)
+  await persistentRedisService.del(prefix_app, `${req.params.parameter}`)
   return res.send();
 });
 
