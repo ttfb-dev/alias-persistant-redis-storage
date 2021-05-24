@@ -12,17 +12,17 @@ const prefix_room       = 'prs_room';
 const prefix_app        = 'prs_app';
 const prefix_incremet   = 'prs_increment';
 
-app.post('/user/:user_id([\\d])/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res) => {
+app.post('/user/:user_id/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res) => {
   await persistentRedisService.set(prefix_user, `${req.params.user_id}_${req.params.parameter}`, req.body)
   return res.send();
 });
 
-app.delete('/user/:user_id([\\d])/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res) => {
+app.delete('/user/:user_id/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res) => {
   await persistentRedisService.del(prefix_user, `${req.params.user_id}_${req.params.parameter}`)
   return res.send();
 });
 
-app.get('/user/:user_id([\\d])/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res) => {
+app.get('/user/:user_id/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res) => {
   const answ = await persistentRedisService.get(prefix_user, `${req.params.user_id}_${req.params.parameter}`);
   if (answ) {
     return res.send(answ);
