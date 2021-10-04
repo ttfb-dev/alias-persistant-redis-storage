@@ -21,8 +21,6 @@ services:
       dockerfile: ./build/nodejs/Dockerfile
     restart: "always"
     image: registry.gitlab.com/aliasgame/persistant-redis-storage:node_14
-    ports: 
-      - 90:80
     env_file: ./build/.env.list
 
   prs-database-redis:
