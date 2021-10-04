@@ -9,6 +9,7 @@ app.use(bodyParser.text());
 
 const prefix_user       = 'prs_user';
 const prefix_room       = 'prs_room';
+const prefix_game       = 'prs_game';
 const prefix_app        = 'prs_app';
 const prefix_incremet   = 'prs_increment';
 
@@ -42,6 +43,24 @@ app.delete('/room/:room_id/parameter/:parameter([a-z\\d\_]{1,50})', async (req, 
 
 app.get('/room/:room_id/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res) => {
   const answ = await persistentRedisService.get(prefix_room, `${req.params.room_id}_${req.params.parameter}`);
+  if (answ) {
+    return res.send(answ);
+  }
+  return res.sendStatus(404);
+});
+
+app.post('/room/:room_id/game/:game_id/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res) => {
+  await persistentRedisService.set(prefix_game, `${req.params.room_id}_${req.params.game_id}_${req.params.parameter}`, req.body)
+  return res.send();
+});
+
+app.delete('/room/:room_id/game/:game_id/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res) => {
+  await persistentRedisService.del(prefix_game, `${req.params.room_id}_${req.params.game_id}_${req.params.parameter}`)
+  return res.send();
+});
+
+app.get('/room/:room_id/game/:game_id/parameter/:parameter([a-z\\d\_]{1,50})', async (req, res) => {
+  const answ = await persistentRedisService.get(prefix_game, `${req.params.room_id}_${req.params.game_id}_${req.params.parameter}`);
   if (answ) {
     return res.send(answ);
   }
